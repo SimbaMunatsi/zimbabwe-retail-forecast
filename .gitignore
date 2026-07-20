@@ -1,0 +1,16 @@
+# Ignore the data folders! We don't want to push 500MB CSVs to GitHub.
+data/
+*.csv
+*.parquet
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore model weights (these get too big)
+models/*.pkl
+models/*.json
+
+# Ignore virtual environments
+venv/
+.env
