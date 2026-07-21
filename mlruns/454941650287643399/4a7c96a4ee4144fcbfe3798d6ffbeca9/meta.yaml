@@ -1,0 +1,15 @@
+artifact_uri: file:///home/simbarashe/Desktop/PROJECTS/zimbabwe-retail-forecast/mlruns/454941650287643399/4a7c96a4ee4144fcbfe3798d6ffbeca9/artifacts
+end_time: 1784642627572
+entry_point_name: ''
+experiment_id: '454941650287643399'
+lifecycle_stage: active
+run_id: 4a7c96a4ee4144fcbfe3798d6ffbeca9
+run_name: masked-eel-473
+run_uuid: 4a7c96a4ee4144fcbfe3798d6ffbeca9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1784642610499
+status: 3
+tags: []
+user_id: simbarashe

@@ -1,0 +1,1 @@
+Store\nDayOfWeek\nPromo\nSchoolHoliday\nCompetitionDistance\nyear\nmonth\nday\nweekofyear\nis_weekend\nsales_lag_1\nsales_lag_7\nrolling_mean_7\nrolling_std_7
