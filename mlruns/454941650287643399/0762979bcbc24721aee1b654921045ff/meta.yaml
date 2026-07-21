@@ -1,0 +1,15 @@
+artifact_uri: file:///home/simbarashe/Desktop/PROJECTS/zimbabwe-retail-forecast/mlruns/454941650287643399/0762979bcbc24721aee1b654921045ff/artifacts
+end_time: 1784641143692
+entry_point_name: ''
+experiment_id: '454941650287643399'
+lifecycle_stage: active
+run_id: 0762979bcbc24721aee1b654921045ff
+run_name: debonair-lamb-741
+run_uuid: 0762979bcbc24721aee1b654921045ff
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1784640973442
+status: 3
+tags: []
+user_id: simbarashe

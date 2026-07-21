@@ -1,14 +1,21 @@
 import joblib
 import pandas as pd
+import mlflow
+import mlflow.xgboost
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error
 from config import DATA_PROCESSED, MODELS_DIR
-from pathlib import Path
 
-# Load processed data
+# ----------------------------
+# MLflow Setup
+# ----------------------------
+mlflow.set_experiment('zimbabwe-retail-forecast')
+
+# ----------------------------
+# Load data
+# ----------------------------
 df = pd.read_parquet(DATA_PROCESSED / 'retail_features.parquet')
 
-# Features and target
 TARGET = 'Sales'
 
 FEATURES = [
@@ -28,11 +35,12 @@ FEATURES = [
     'rolling_std_7'
 ]
 
-# Fill remaining missing values
 X = df[FEATURES].fillna(0)
 y = df[TARGET]
 
-# Time-based split (NO random split)
+# ----------------------------
+# Time-based split
+# ----------------------------
 split_date = '2015-06-01'
 
 train_mask = df['Date'] < split_date
@@ -46,40 +54,62 @@ y_test = y[test_mask]
 print(f'Train samples: {len(X_train):,}')
 print(f'Test samples: {len(X_test):,}')
 
-# Basic XGBoost model
-model = XGBRegressor(
-    n_estimators=300,
-    max_depth=8,
-    learning_rate=0.05,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    objective='reg:squarederror',
-    random_state=42,
-    n_jobs=-1
-)
+# ----------------------------
+# Model parameters
+# ----------------------------
+params = {
+    'n_estimators': 300,
+    'max_depth': 8,
+    'learning_rate': 0.05,
+    'subsample': 0.8,
+    'colsample_bytree': 0.8,
+    'objective': 'reg:squarederror',
+    'random_state': 42,
+    'n_jobs': -1
+}
 
-# Train
-print('Training XGBoost...')
-model.fit(X_train, y_train)
+# ----------------------------
+# MLflow Run
+# ----------------------------
+with mlflow.start_run():
 
-# Predict
-preds = model.predict(X_test)
+    # Log parameters
+    mlflow.log_params(params)
 
-# Evaluate
-mae = mean_absolute_error(y_test, preds)
+    # Train model
+    model = XGBRegressor(**params)
 
-print(f'XGBoost MAE: {mae:,.2f}')
+    print('Training XGBoost...')
+    model.fit(X_train, y_train)
 
-# Save model
-model_path = MODELS_DIR / 'xgboost_retail_model.pkl'
-joblib.dump(model, model_path)
+    # Predict
+    preds = model.predict(X_test)
 
-print(f'Model saved to: {model_path}')
+    # Evaluate
+    mae = mean_absolute_error(y_test, preds)
 
+    print(f'XGBoost MAE: {mae:,.2f}')
 
-metrics_path = MODELS_DIR / 'metrics.txt'
+    # Log metric
+    mlflow.log_metric('mae', mae)
 
-with open(metrics_path, 'w') as f:
-    f.write(f'MAE: {mae:.2f}\n')
+    # Log model to MLflow
+    mlflow.xgboost.log_model(model, artifact_path='model')
 
-print(f'Metrics saved to: {metrics_path}')
+    # Save local model
+    model_path = MODELS_DIR / 'xgboost_retail_model.pkl'
+    joblib.dump(model, model_path)
+
+    print(f'Model saved to: {model_path}')
+
+    # Log artifact
+    mlflow.log_artifact(model_path)
+
+    # Feature list artifact
+    feature_file = MODELS_DIR / 'features.txt'
+    with open(feature_file, 'w') as f:
+        f.write('\\n'.join(FEATURES))
+
+    mlflow.log_artifact(feature_file)
+
+    print('\\nRun logged successfully to MLflow.')
