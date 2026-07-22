@@ -1,16 +1,9 @@
-#from pathlib import Path
-#import sys
+
 import joblib
 import pandas as pd
 import shap
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-# --------------------------------------------------
-# Make src/ importable
-# --------------------------------------------------
-#PROJECT_ROOT = Path(__file__).resolve().parent.parent
-#sys.path.append(str(PROJECT_ROOT / 'src'))
 
 from src.config import MODELS_DIR
 from api.schemas import ForecastRequest, ForecastResponse, FeatureContribution
