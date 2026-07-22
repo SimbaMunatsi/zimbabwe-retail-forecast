@@ -4,7 +4,7 @@ import mlflow
 import mlflow.xgboost
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error
-from config import DATA_PROCESSED, MODELS_DIR
+from src.config import DATA_PROCESSED, MODELS_DIR
 
 # ----------------------------
 # MLflow Setup

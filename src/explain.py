@@ -2,7 +2,7 @@ import joblib
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-from config import DATA_PROCESSED, MODELS_DIR
+from src.config import DATA_PROCESSED, MODELS_DIR
 
 # ----------------------------
 

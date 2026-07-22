@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.metrics import mean_absolute_error
-from config import DATA_PROCESSED
+from src.config import DATA_PROCESSED
 
 # Load processed data
 df = pd.read_parquet(DATA_PROCESSED / 'retail_features.parquet')

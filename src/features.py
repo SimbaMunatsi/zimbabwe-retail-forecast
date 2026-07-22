@@ -1,5 +1,5 @@
 import pandas as pd
-from config import DATA_RAW, DATA_PROCESSED
+from src.config import DATA_RAW, DATA_PROCESSED
 
 
 def build_features():
