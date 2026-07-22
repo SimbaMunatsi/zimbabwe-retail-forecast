@@ -78,26 +78,31 @@ print(f'SHAP sample shape: {X_sample.shape}')
 
 # ----------------------------
 
-print('Creating SHAP explainer...')
-
-# This approach is compatible with XGBoost 3.x
-
-explainer = shap.Explainer(model.predict, X_background)
-
+# ----------------------------
+# Create SHAP explainer (WORKING VERSION)
 # ----------------------------
 
-# Calculate SHAP values
+print('Creating SHAP explainer...')
 
+# Model-agnostic explainer compatible with XGBoost 2.1 + Python 3.12
+explainer = shap.Explainer(model.predict, X_background)
+
+# Save explainer for API reuse
+explainer_path = MODELS_DIR / 'shap_explainer.pkl'
+joblib.dump(explainer, explainer_path)
+
+print(f'SHAP explainer saved to: {explainer_path}')
+
+# ----------------------------
+# Calculate SHAP values
 # ----------------------------
 
 print('Calculating SHAP values...')
 
 # Returns a SHAP Explanation object
-
 shap_explanation = explainer(X_sample)
 
-# Extract raw SHAP values for aggregation
-
+# Extract raw SHAP values
 shap_values_array = shap_explanation.values
 
 print('SHAP values calculated successfully.')
@@ -113,7 +118,7 @@ print('Generating SHAP summary plot...')
 plt.figure(figsize=(12, 8))
 
 shap.summary_plot(
-shap_explanation,
+shap_values_array,
 X_sample,
 show=False
 )
